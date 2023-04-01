@@ -1,6 +1,6 @@
 
-dir = "C:/Users/x/gs/masterBio/srodblonek-rogowki/DATASET_SDA/YG_ready";
-number_of_files = 30;
+dir = "C:/Users/x/gs/masterBio/dane/YG";
+number_of_files = 5;
 
 v = newArray("a","b");
 
@@ -9,7 +9,7 @@ for (i=1; i<number_of_files; i++){
 	open(input_path);
 	run("Auto Local Threshold", "method=Bernsen radius=15 parameter_1=0 parameter_2=0 white");
 	run("Invert LUT");
-	output_path = dir + "/YG_1/" + i + ".png";
+	output_path = dir + "/results/4/" + i + "_met.png";
 	saveAs("PNG", output_path);
 	run("Close All");
 }

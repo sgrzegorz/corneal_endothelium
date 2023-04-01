@@ -28,34 +28,34 @@ print("\\Clear");
 // #################################################
 
 // to avoid miss-selection of processed window and to speed up:
-// setBatchMode("hide");		// and save the images at the end.
+ setBatchMode("hide");		// and save the images at the end.
 
 // images - from bestfit www site
-
-open("yg9_src.png");
-rename("SRC");
-
-open("yg9_khbin.png");
-rename("BIN");
-Check8bit0255BinaryFile();
-
-open("yg9_seg.png");
-rename("MANUAL");
-Check8bit0255BinaryFile();
+//
+//open("yg9_src.png");
+//rename("SRC");
+//
+//open("yg9_khbin.png");
+//rename("BIN");
+//Check8bit0255BinaryFile();
+//
+//open("yg9_seg.png");
+//rename("MANUAL");
+//Check8bit0255BinaryFile();
 
 
 // your image selections - uncommment to use :
 
-//open( File.openDialog("SOURCE_IMAGE") );
-//rename("SRC");
-//
-//open( File.openDialog("BINARY_IMAGE") );
-//rename("BIN");
-//Check8bit0255BinaryFile();
-//
-//open( File.openDialog("MANUAL_SEGMENTATION") );
-//rename("MANUAL");
-//Check8bit0255BinaryFile();
+open( File.openDialog("SOURCE_IMAGE") );
+rename("SRC");
+
+open( File.openDialog("BINARY_IMAGE") );
+rename("BIN");
+Check8bit0255BinaryFile();
+
+open( File.openDialog("MANUAL_SEGMENTATION") );
+rename("MANUAL");
+Check8bit0255BinaryFile();
 
 
 // ##################################################
@@ -83,17 +83,19 @@ run("Duplicate...", "title=MANUAL_BESTFIT");
 // #####################
 // comparison of outputs
 // #####################
-
+path = "C:/Users/x/gs/masterBio/dane/YG/results/bernesen_yg_1/";
 // differences of two methods of segmentation
 run("Merge Channels...", "c1=yg9_khbin_floodbaseditth.png c5=MANUAL keep");
 rename("MANUAL_C_vs_KH_bestfit_R");
+save(path+"MANUAL_C_vs_KH_bestfit_R.png");
  // changes of iterative thinning for manual segmentation
 run("Merge Channels...", "c1=MANUAL_BESTFIT c5=MANUAL keep");
 rename("MANUAL_C_AFTER_BESTFIT_R");
+save(path+"MANUAL_C_AFTER_BESTFIT_R.png");
  // overlay of two different method after BestFit (the aim of BestFit)
 run("Merge Channels...", "c1=MANUAL_BESTFIT c5=yg9_khbin_floodbaseditth.png keep");
 rename("Overlay_of_KH_Bestfit_C_and_Manual_Bestfit_R");
-
+save(path+"Overlay_of_KH_Bestfit_C_and_Manual_Bestfit_R.png");
 
 // ##############################################################################################################################################
 
