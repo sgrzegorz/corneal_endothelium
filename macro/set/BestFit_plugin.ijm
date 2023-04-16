@@ -18,6 +18,7 @@ run("BestFit IterativeThinning", "binary_or_segmentation=BIN grayscale_source=SR
 saveAs("PNG", dir_out+name+".bestfit.png");
 
 
+
 open(dir+"yg9_seg.png");
 rename("MANUAL");
 run("RGB Color");
