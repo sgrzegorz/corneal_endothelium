@@ -32,17 +32,17 @@ function process(i,src,met) {
 	Array.print(src);
 	Array.print(met);
     openAs(src[2],"SRC");
-//    print(getTitle());
+    print(getTitle());
     
 	
-//	openAs(met[2],"MET");
-//    run("8-bit");
-//    rename("MET");
-//
-//    run("Duplicate...", "title=MET_BESTFIT");
-//    run("BestFit IterativeThinning", "binary_or_segmentation=MET_BESTFIT grayscale_source=SRC task=BFI_Thinning_and_Dilation/BFI_Thinning_cycles number_of_dilations=2 max_number_of_cycles=10");
-////    saveAs("PNG", met[4]+".bestfit.png");
-//    saveAsMe("PNG", met[4]+".bestfit.png");
+	openAs(met[2],"MET");
+    run("8-bit");
+    rename("MET");
+
+    run("Duplicate...", "title=MET_BESTFIT");
+    run("BestFit IterativeThinning", "binary_or_segmentation=MET_BESTFIT grayscale_source=SRC task=BFI_Thinning_and_Dilation/BFI_Thinning_cycles number_of_dilations=2 max_number_of_cycles=10");
+//    saveAs("PNG", met[4]+".bestfit.png");
+    saveAsMe("PNG", met[4]+".bestfit.png");
 
 
 //    run("Merge Channels...", "c1=MET c5=MET_BESTFIT keep");
@@ -52,10 +52,10 @@ function process(i,src,met) {
 }
 
 
-dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/"
 
 close("*");
 print("\\Clear");
+dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/";
 
 //setBatchMode("hide");
 
@@ -65,7 +65,7 @@ for(i=101;i<=101;i++){ // yg
 	met = getName(i,"_met",dir+"result/bernsen/2/");
 	print(i);
 
-//    process(i,src, met);
+    process(i,src, met);
 }
 
 
