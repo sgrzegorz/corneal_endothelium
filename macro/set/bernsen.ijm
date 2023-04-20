@@ -20,7 +20,7 @@ function getName(i,name,directory){
 
 
 
-function openAs(path,name){
+function openImg(path,name){
     open(path);
     rename(name);
 }
@@ -36,14 +36,16 @@ function saveImg(format, path){
 
 }
 
+
+
 function process(i,src,met) {
 	Array.print(src);
 	Array.print(met);
-    openAs(src[2],"SRC");
+    openImg(src[2],"SRC");
     print(getTitle());
 
 
-	openAs(met[2],"MET");
+	openImg(met[2],"MET");
 	run("RGB Color");
     run("8-bit");
 
@@ -52,19 +54,19 @@ function process(i,src,met) {
 
     print(""+met[4]+".bestfit.png");
     saveImg("PNG",""+met[4]+".bestfit.png");
-//	save(""+met[4]+".bestfit.png");
-//
-	
 
-    run("Merge Channels...", "c1=MET c5=MET_BESTFIT keep");
+
+	seg_path = ""+src[3]+i+"_seg.png";
+	print(seg_path);
+	openImg(seg_path,"SEG");
+    run("Merge Channels...", "c1=SEG c5=MET_BESTFIT keep");
     saveImg("PNG",""+ met[4]+"_compare.png");
-//	save(met[4]+"_compare.png");
-
 
 }
 
 
-dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/"
+
+dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/";
 
 
 //setBatchMode("hide");
