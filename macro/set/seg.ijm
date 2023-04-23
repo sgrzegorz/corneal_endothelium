@@ -32,7 +32,7 @@ function process(i,src,seg) {
     run("Merge Channels...", "c1=SEG c5=SEG_BESTFIT keep");
     saveAs("PNG", dir_seg+seg[0]+"_compare.png");
 
-    
+	run("Close All");    
 }
 
 
@@ -49,7 +49,8 @@ function processDataSet(i){
 for(i=101;i<=130;i++){ // yg
 	processDataSet(i);
 }
-for(i=201;i<=252;i++){ // bs
+
+for(i=201;i<=252;i++){ // bs
 	processDataSet(i);
 }
 for(i=301;i<=307;i++){ // ygs
