@@ -40,6 +40,10 @@ function getVal(value){
 	return n
 }
 
+// Example of usage:
+// string = "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/otsu/1/ Otsu 15 0 0"
+// runMacro("C:/Users/x/gs/masterBio/code/corneal_endothelium/macro/set/run_method.ijm", string);
+
 values = getArgument()
 if (lengthOf(values)==0)
   return 0;
