@@ -93,6 +93,9 @@ function runForAll(path){
 
 }
 
+// Example of usage:
+// runMacro("C:/Users/x/gs/masterBio/code/corneal_endothelium/macro/set/run_bestfit.ijm", "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/bernsen/2/");
+
 dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/";
 
 dirpath = getArgument();
