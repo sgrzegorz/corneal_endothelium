@@ -1,11 +1,12 @@
 close("*");
 print("\\Clear");
 
-setBatchMode("hide");
+//setBatchMode("hide");
 
 
 dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/data/default/";
 dir_out = dir;
+name="yg9_src";
 
 open(dir+"yg9_src.png");
 rename("SRC");
@@ -18,6 +19,7 @@ run("BestFit IterativeThinning", "binary_or_segmentation=BIN grayscale_source=SR
 saveAs("PNG", dir_out+name+".bestfit.png");
 
 
+name="yg9_khbin";
 
 open(dir+"yg9_seg.png");
 rename("MANUAL");
@@ -27,6 +29,7 @@ run("BestFit IterativeThinning", "binary_or_segmentation=MANUAL grayscale_source
 saveAs("PNG", dir_out+name+".bestfit.png");
 
 
+print("Finished");
 
 
 
