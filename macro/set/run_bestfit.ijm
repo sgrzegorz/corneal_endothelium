@@ -67,34 +67,38 @@ function process(i,src,met) {
 
 
 
-function processDataSet(i){
+function processDataSet(i,path){
 	src = getName(i,"",dir+"data/all/");
-	met = getName(i,"_met",dir+"result/bernsen/2/");
+	met = getName(i,"_met",path);
 	print(i);
 
     process(i,src, met);
 }
 
 
-function runForAll(){
+function runForAll(path){
 	for(i=101;i<=130;i++){ // yg
-		processDataSet(i);
+		processDataSet(i,path);
 	}
 	
 	for(i=201;i<=252;i++){ // bs
-		processDataSet(i);
+		processDataSet(i,path);
 	}
 	for(i=301;i<=307;i++){ // ygs
-		processDataSet(i);
+		processDataSet(i,path);
 	}
 	for(i=401;i<=430;i++){ // ar
-		processDataSet(i);
+		processDataSet(i,path);
 	}
 
 }
 
 dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/";
-runForAll();
+
+dirpath = getArgument();
+print("[Parameter received: ", dirpath, "]"); // "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/bernsen/2"
+
+runForAll(dirpath);
 
 
 
