@@ -1,7 +1,9 @@
+setBatchMode("hide");
 
 
 function processDataSet(i,string){
-	input_path = path + i + "_SDAr6.png";
+	all_path = "C:/Users/x/gs/masterBio/code/corneal_endothelium/data/all/";
+	input_path = all_path + i + "_SDAr6.png";
 	open(input_path);
 	run("Auto Local Threshold", string);
 	run("Invert LUT");
