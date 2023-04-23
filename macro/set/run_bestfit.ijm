@@ -1,5 +1,4 @@
 close("*");
-print("\\Clear");
 
 close("ROI Manager");
 close("Results");
@@ -36,7 +35,6 @@ function openBinImg(path,name){
 
 function saveImg(format, path){
 	title = getTitle();
-	print(title);
 	run("Duplicate...", "title="+title);
 	saveAs(format, path);
 	close();
@@ -63,6 +61,7 @@ function process(i,src,met) {
     run("Merge Channels...", "c1=SEG_BESTFIT c5=MET_BESTFIT keep");
     rename("SEG_BESTFIT_vs_MET_BESTFIT");
     saveImg("PNG",""+ met[4]+"_compare.png");
+    run("Close All");
 }
 
 
