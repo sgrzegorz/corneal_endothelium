@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from tqdm import tqdm
 from PIL import Image
 import cv2
 from src.dirs import get_pairs
@@ -17,11 +18,13 @@ def load(filename):
 
 
 class Metric:
-    def __init__(self,tp,fp,fn,tn):
+    def __init__(self,tp,fp,fn,tn,img_gt,img):
         self.tp = tp
         self.fp = fp
         self.fn = fn
         self.tn = tn
+        self.img_gt = img_gt
+        self.img = img
 
     def dice(self):
         return (2*self.tp) / (2*self.tp + self.fn + self.fp)
@@ -31,6 +34,20 @@ class Metric:
 
     def acc(self):
         return (self.tp + self.tn) / (self.tp + self.tn + self.fn + self.fp)
+
+    def _white_pixels(self,image):
+        count=0
+        for (x, y), value in np.ndenumerate(image):
+            if image[x, y] == 255:
+                count+=1
+        return count
+
+    def fitness(self):
+        return self.tp / self._white_pixels(self.img_gt)
+
+    def information(self):
+        a =  f" dice: {self.dice():.3f}, jaccard {self.jaccard():.3f}, accuracy {self.acc():.3f},  {self.fitness():.3f}"
+        return a
 
 
 def get_metric(gt_img, gen_img):
@@ -47,19 +64,19 @@ def get_metric(gt_img, gen_img):
             if img[x,y] == 255:
                 tp +=1
             elif img[x,y] == 0:
-                fn +=1
+                fp +=1
             else:
                 raise Exception('1')
         elif img_gt[x,y] == 0:
             if img[x,y] == 0:
                 tn +=1
             elif img[x,y] == 255:
-                fp +=1
+                fn +=1
             else:
                 raise Exception('2')
     # print(f'TP={tp}, FP={fp}')
     # print(f'FN={fn}, TN={tn}')
-    return Metric(tp,fp,fn,tn)
+    return Metric(tp,fp,fn,tn,img_gt,img)
 
 class Fit:
     def __init__(self, gt_dir,generated_dir):
@@ -84,6 +101,13 @@ class Fit:
         self.mean_acc = np.mean(np.array([ metric.acc() for metric in self.metrics]))
         self.mean_jaccard = np.mean(np.array([metric.jaccard() for metric in self.metrics]))
         self.mean_dice = np.mean(np.array([metric.dice() for metric in self.metrics]))
+        self.mean_fitness = np.mean(np.array([metric.fitness() for metric in self.metrics]))
+
+    def get_means(self):
+        return f" dice: {self.mean_dice:.3f}, jaccard: {self.mean_jaccard:.3f}, accuracy: {self.mean_acc:.3f}, fitness: {self.mean_fitness:.3f}"
+
+
+
 
 
 
@@ -91,20 +115,36 @@ class Fit:
 def generate_fit(gt_dir,generated_dir):
     pairs = get_pairs(gt_dir, generated_dir)
     fit = Fit(gt_dir, generated_dir)
-    for (gt_img, gen_img) in pairs:
+    for (gt_img, gen_img) in tqdm(pairs):
         metric = get_metric(gt_img, gen_img)
         fit.metrics.append(metric)
+
+        metric.information();
         fit.gt_files.append(gt_img)
         fit.gen_files.append(gen_img)
 
-        print(metric.acc(), metric.dice(), metric.jaccard())
+        print(metric.information())
 
     fit.save()
 
 
+def _subdirs(path):
+    return [f.path for f in os.scandir(path) if f.is_dir()]
+
+def generate_fits(gt_dir,generated_dir):
+    for subdir in _subdirs(generated_dir):
+        generate_fit(gt_dir, subdir)
+
 if __name__ == '__main__':
-    gt_dir = path_root('data','yg')
-    generated_dir = path_root('result', 'bernsen')
-    generate_fit(gt_dir,generated_dir)
+    gt_dir = path_root('data','all')
+    generated_dir = path_root('result', 'otsu')
+    generate_fits(gt_dir, generated_dir)
+    # generated_dir = path_root('result', 'contrast')
+    # generated_dir = path_root('result', 'nibla')
+    # generate_fit(gt_dir,generated_dir)
+
+
+
+
 
 
