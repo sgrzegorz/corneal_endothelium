@@ -1,0 +1,22 @@
+
+
+print("\\Clear");
+
+
+
+id=0
+
+for(r=7;r<=22;r+=2){
+	path="C:/Users/x/gs/masterBio/code/corneal_endothelium/result/otsu/"+id+"/";
+	string = path+" Otsu "+r+ " 0 0";
+	runMacro("C:/Users/x/gs/masterBio/code/corneal_endothelium/macro/set/run_method.ijm", string);
+
+	runMacro("C:/Users/x/gs/masterBio/code/corneal_endothelium/macro/set/run_bestfit.ijm", path);
+
+	print("-------------------------------");
+	id+=1;
+}
+
+
+selectWindow("Log");
+saveAs("Text", "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/otsu/logs.txt");
