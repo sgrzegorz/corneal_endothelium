@@ -6,7 +6,7 @@ print("\\Clear");
 // czy jego bieżąca wartość jest najbliższa odpowiednio lokalnemu maksimum czy minimum.
 // Procedura jest skrajnym przypadkiem "Toggle Contrast Enhancement"
 
-// r - radius of window around pixel
+// r - radius of window around pixel, =15
 // Parameter 1: ------
 // Parameter 2: ------
 

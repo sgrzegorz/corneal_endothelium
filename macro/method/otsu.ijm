@@ -3,7 +3,7 @@
 print("\\Clear");
 
 // Implements a local version of Otsu's global threshold clustering. The algorithm searches for the threshold that minimizes the intra-class variance, defined as a weighted sum of variances of the two classes. The local set is a circular ROI and the central pixel is tested against the Otsu threshold found for that region.
-// r - radius of window around pixel
+// r - radius of window around pixel, =15
 // Parameter 1: ------
 // Parameter 2: ------
 
