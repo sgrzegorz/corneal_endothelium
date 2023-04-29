@@ -2,7 +2,11 @@ bernsen.ijm
 
 print("\\Clear");
 
-
+// Metoda Median używa progu thresold jako mediany lokalnego rozkładu skali szarości. Wariacja tej metody używa median-C, gdzie C to stała
+// pixel = ( pixel > median - c ) ? object : background
+// r - radius of window around pixel
+// Parameter 1: is the C values. The default value is 0. Any other number will change the default value.
+// Parameter 2: ------
 
 for(r=25;r<=70;r+=4){
     id=""+r+"_0_0";

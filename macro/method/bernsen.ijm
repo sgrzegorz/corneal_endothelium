@@ -2,7 +2,9 @@
 
 print("\\Clear");
 
-
+// r - radius of window around pixel
+// Parameter 1: is the contrast threshold. The default value is 15. Any number different than 0 will change the default value.
+// Parameter 2: ------
 
 for(r=25;r<=70;r+=4){
     id=""+r+"_0_0";
