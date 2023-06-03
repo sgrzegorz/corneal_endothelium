@@ -2,10 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from src.utils import path_root
 
-name = 'mean'
+name = 'median'
 
 csv_path = path_root('result_with_sda',name , 'results.csv')
 aggregate_by = {'fitness': np.mean, 'dice': np.mean, 'jaccard': np.mean, 'acc': np.mean}
@@ -18,27 +19,36 @@ df['r'] = [int(params.split('_')[0]) for params in df.id ]
 df['param1'] = [int(params.split('_')[1]) for params in df.id ]
 # df = df.sort_values('id_numeric', ascending=False)
 
-new_row = {'r':12, 'param1':3, 'fitness':0.9}
+# new_row = {'param1':4,'r':12,  'fitness':0.9}
 # df = df.append(new_row,ignore_index=True)
 
 result = df.pivot(index='r', columns='param1', values='fitness')
 
 
+# result = result.interpolate(method='pad', limit=2)
 
 
 
-
-M = result.iloc[:,:].values.max()
-labels = result.iloc[:,:].applymap(lambda v: str(v) if v == M else '')
+# M = result.iloc[:,:].values.max()
+# labels = result.iloc[:,:].applymap(lambda v: str(v) if v == M else '')
 
 
 # sns.heatmap(result, fmt="",cmap="coolwarm", annot=labels, annot_kws={'fontsize':4})
 
 
-# plt.imshow(result, cmap='coolwarm', interpolation='bilinear')
-plt.imshow(result, cmap='coolwarm')
+ax = plt.subplot()
+# image = ax.imshow(result, cmap='coolwarm', interpolation='bilinear')
+image = ax.imshow(result, cmap='coolwarm')
+plt.ylabel('R')
+plt.xlabel('param1')
+
+divider = make_axes_locatable(ax)
+cax = divider.append_axes("right", size="5%", pad=0.05)
+plt.colorbar(image, cax=cax)
+
+
+
 plt.show()
-# plt.imshow(data, interpolation='bilinear')
 
 
 # import numpy as np
