@@ -1,4 +1,3 @@
-bernsen.ijm
 
 print("\\Clear");
 
