@@ -1,8 +1,0 @@
-C:/Users/x/gs/masterBio/code/corneal_endothelium/result/contrast/0/
-method=Contrast radius=7 parameter_1=0 parameter_2=0 white
-[Parameter received:  C:/Users/x/gs/masterBio/code/corneal_endothelium/result/contrast/0/ ]
-101
-102
-103
-104
--------------------------------
