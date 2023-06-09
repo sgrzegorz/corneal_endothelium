@@ -69,16 +69,6 @@ def get_metric(gt_img, gen_img):
     # print(f'FN={fn}, TN={tn}')
     return Metric(tp,fp,fn,tn,gt_img,gen_img)
 
-class Statistics:
-    # wylicza pandas table, dla wszystkich metryk fita
-    def __init__(self):
-        pass
-
-class StatisticsView:
-    # pokazuje odpowiednio wyfiltrowane widoki ze Statistics
-    def __init__(self):
-        pass
-
 
 def get_dataset(file_id):
     file_id = int(file_id)
@@ -97,14 +87,17 @@ def get_dataset(file_id):
 
 def generate_fit(gt_dir,generated_dir,df,method, subdir_name,columns,disable):
     pairs = get_pairs(gt_dir, generated_dir)
+    new_rows = pd.DataFrame([],columns=columns)
     for (gen_img,gt_img) in tqdm(pairs,disable=disable):
-        metric = get_metric(gt_img, gen_img)
         file_id = extract_file_id(gen_img.filename)
-        dataset = get_dataset(file_id)
-        row = pd.DataFrame([[method,subdir_name,file_id,dataset,metric.fitness(),metric.dice(),metric.jaccard(),metric.acc()]],columns=columns)
-        df = pd.concat([df,row],ignore_index=True)
-    return df
-        # df.append({'method': method, 'id': subdir, 'dice' : metric.dice(),'jaccard' : metric.jaccard(),'acc' : metric.acc(),'fitness' : metric.fitness()},ignore_index = True)
+
+        exists = df.loc[(df['method'] == method) & (df['id'] == subdir_name) & (df['file'] == file_id)].any().all()
+        if not exists:
+            dataset = get_dataset(file_id)
+            metric = get_metric(gt_img, gen_img)
+            row = pd.DataFrame([[method,subdir_name,file_id,dataset,metric.fitness(),metric.dice(),metric.jaccard(),metric.acc()]],columns=columns)
+            new_rows = pd.concat([new_rows,row],ignore_index=True)
+    return new_rows
 
 
 def _subdirs(path):
@@ -114,18 +107,24 @@ def generate_fits(method,generated_dir,csv_path,disable):
     gt_dir = path_root('data', 'all')
     columns = ['method','id','file','dataset','fitness','dice','jaccard', 'acc']
     df = pd.DataFrame(columns = columns)
+    try:
+        df = pd.read_csv(csv_path)
+    except FileNotFoundError:
+        print('Csv file was not found')
+        exit(1)
+        df = pd.DataFrame(columns=columns)
+
     for (subdir_path, subdir_name) in _subdirs(generated_dir):
-        df = generate_fit(gt_dir, subdir_path,df, method,subdir_name,columns,disable)
-        df.to_csv(csv_path, index=False)
+        new_rows = generate_fit(gt_dir, subdir_path,df, method,subdir_name,columns,disable)
+        df = pd.concat([df,new_rows],ignore_index=True)
     return df
 
 
 def process_to_csv(method, dir='result_with_sda',disable=False):
-    # method = 'mean'
     generated_dir = path_root(dir, method)
     csv_path = path_root(dir,method,'results.csv')
     df = generate_fits(method,generated_dir,csv_path,disable)
-    df = pd.read_csv(csv_path)
-    print(df)
+    df.to_csv(csv_path, index=False)
+    print(f'{method} finished.')
 
-# contrast 06.05,
+process_to_csv('test','result',disable=False)
