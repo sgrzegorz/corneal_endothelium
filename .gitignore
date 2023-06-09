@@ -3,7 +3,10 @@
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
 __pycache__/
-
+result_with_sda
+result
+result_without_sda
+sandbox
 # User-specific stuff
 .idea/**/workspace.xml
 .idea/**/tasks.xml
@@ -11,7 +14,6 @@ __pycache__/
 .idea/**/dictionaries
 .idea/**/shelf
 jupyter-log*
-sandbox
 # Generated files
 .idea/**/contentModel.xml
 

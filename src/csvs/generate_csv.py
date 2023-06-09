@@ -4,8 +4,8 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
-from main import  get_pairs
-from src.dirs import extract_file_id
+from src.csvs.dirs import get_pairs
+from src.csvs.dirs import extract_file_id
 from src.utils import path_root
 
 class Metric:
