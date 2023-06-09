@@ -27,11 +27,7 @@ class Metric:
         return (self.tp + self.tn) / (self.tp + self.tn + self.fn + self.fp)
 
     def _white_pixels(self,image):
-        count=0
-        for (x, y), value in np.ndenumerate(image):
-            if image[x, y] == 255:
-                count+=1
-        return count
+        return np.sum(image == 255)
 
     def fitness(self):
         return self.tp / self._white_pixels(self.img_gt.get_image())
@@ -40,34 +36,45 @@ class Metric:
         a =  f" dice: {self.dice():.3f}, jaccard {self.jaccard():.3f}, accuracy {self.acc():.3f},  {self.fitness():.3f}"
         return a
 
+def get_metric(gt_img, pred_img):
+    gt = gt_img.get_image()
+    pred = pred_img.get_image()
+    if gt is None or pred is None:
+        return None
 
-def get_metric(gt_img, gen_img):
-    img_gt = gt_img.get_image()
-    img = gen_img.get_image()
+    negative = 0
+    positive = 255
+    # tp = 0
+    # tn = 0
+    # fp = 0
+    # fn = 0
+    # for (x,y), value in np.ndenumerate(gt):
+    #     if gt[x,y] == positive:
+    #         if pred[x,y] == positive:
+    #             tp +=1
+    #         elif pred[x,y] == negative:
+    #             fn +=1
+    #         else:
+    #             raise Exception('1')
+    #     elif gt[x,y] == negative:
+    #         if pred[x,y] == negative:
+    #             tn +=1
+    #         elif pred[x,y] == positive:
+    #             fp +=1
+    #         else:
+    #             raise Exception('2')
+    # print(tp,tn,fp,fn)
 
-    tp = 0
-    tn = 0
-    fp = 0
-    fn = 0
-    # TODO pewnie można przyspieszyć przez nakładanie na siebie masek
-    for (x,y), value in np.ndenumerate(img_gt):
-        if img_gt[x,y] == 255:
-            if img[x,y] == 255:
-                tp +=1
-            elif img[x,y] == 0:
-                fp +=1
-            else:
-                raise Exception('1')
-        elif img_gt[x,y] == 0:
-            if img[x,y] == 0:
-                tn +=1
-            elif img[x,y] == 255:
-                fn +=1
-            else:
-                raise Exception('2')
+    tp = np.sum(np.logical_and(pred == positive, gt == positive))
+    tn = np.sum(np.logical_and(pred == negative, gt == negative))
+    fp = np.sum(np.logical_and(pred == positive, gt == negative))
+    fn = np.sum(np.logical_and(pred == negative, gt == positive))
+    # print(tp,tn,fp,fn)
+    # print('-------------')
+
     # print(f'TP={tp}, FP={fp}')
     # print(f'FN={fn}, TN={tn}')
-    return Metric(tp,fp,fn,tn,gt_img,gen_img)
+    return Metric(tp,fp,fn,tn,gt_img,pred_img)
 
 
 def get_dataset(file_id):
@@ -95,6 +102,8 @@ def generate_fit(gt_dir,generated_dir,df,method, subdir_name,columns,disable):
         if not exists:
             dataset = get_dataset(file_id)
             metric = get_metric(gt_img, gen_img)
+            if metric is None:
+                continue
             row = pd.DataFrame([[method,subdir_name,file_id,dataset,metric.fitness(),metric.dice(),metric.jaccard(),metric.acc()]],columns=columns)
             new_rows = pd.concat([new_rows,row],ignore_index=True)
     return new_rows
@@ -108,11 +117,12 @@ def generate_fits(method,generated_dir,csv_path,disable):
     columns = ['method','id','file','dataset','fitness','dice','jaccard', 'acc']
     df = pd.DataFrame(columns = columns)
     try:
-        df = pd.read_csv(csv_path)
+        # df = pd.read_csv(csv_path)
+        df = pd.DataFrame(columns=columns)
+
     except FileNotFoundError:
         print('Csv file was not found')
         exit(1)
-        df = pd.DataFrame(columns=columns)
 
     for (subdir_path, subdir_name) in _subdirs(generated_dir):
         new_rows = generate_fit(gt_dir, subdir_path,df, method,subdir_name,columns,disable)
@@ -127,4 +137,5 @@ def process_to_csv(method, dir='result_with_sda',disable=False):
     df.to_csv(csv_path, index=False)
     print(f'{method} finished.')
 
-process_to_csv('test','result',disable=False)
+if __name__ == '__main__':
+    process_to_csv('niblack','result_with_sda',disable=False)
