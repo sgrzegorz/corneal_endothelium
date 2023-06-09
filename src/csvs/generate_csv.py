@@ -95,9 +95,9 @@ def get_dataset(file_id):
     else:
         raise Exception('Unknown file ')
 
-def generate_fit(gt_dir,generated_dir,df,method, subdir_name,columns):
+def generate_fit(gt_dir,generated_dir,df,method, subdir_name,columns,disable):
     pairs = get_pairs(gt_dir, generated_dir)
-    for (gen_img,gt_img) in tqdm(pairs):
+    for (gen_img,gt_img) in tqdm(pairs,disable=disable):
         metric = get_metric(gt_img, gen_img)
         file_id = extract_file_id(gen_img.filename)
         dataset = get_dataset(file_id)
@@ -110,21 +110,21 @@ def generate_fit(gt_dir,generated_dir,df,method, subdir_name,columns):
 def _subdirs(path):
     return [(f.path,f.name) for f in os.scandir(path) if f.is_dir()]
 
-def generate_fits(method,generated_dir,csv_path):
+def generate_fits(method,generated_dir,csv_path,disable):
     gt_dir = path_root('data', 'all')
     columns = ['method','id','file','dataset','fitness','dice','jaccard', 'acc']
     df = pd.DataFrame(columns = columns)
     for (subdir_path, subdir_name) in _subdirs(generated_dir):
-        df = generate_fit(gt_dir, subdir_path,df, method,subdir_name,columns)
+        df = generate_fit(gt_dir, subdir_path,df, method,subdir_name,columns,disable)
         df.to_csv(csv_path, index=False)
     return df
 
 
-def process(method):
+def process_to_csv(method, dir='result_with_sda',disable=False):
     # method = 'mean'
-    generated_dir = path_root('result', method)
-    csv_path = path_root('result',method,'results.csv')
-    df = generate_fits(method,generated_dir,csv_path)
+    generated_dir = path_root(dir, method)
+    csv_path = path_root(dir,method,'results.csv')
+    df = generate_fits(method,generated_dir,csv_path,disable)
     df = pd.read_csv(csv_path)
     print(df)
 
