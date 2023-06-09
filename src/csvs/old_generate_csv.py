@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import pandas as pd
 from tqdm import tqdm
 from PIL import Image
 import cv2
@@ -43,7 +44,7 @@ class Metric:
         return count
 
     def fitness(self):
-        return self.tp / self._white_pixels(self.img_gt)
+        return self.tp / self._white_pixels(self.gt_img.get_image())
 
     def information(self):
         a =  f" dice: {self.dice():.3f}, jaccard {self.jaccard():.3f}, accuracy {self.acc():.3f},  {self.fitness():.3f}"
@@ -51,8 +52,8 @@ class Metric:
 
 
 def get_metric(gt_img, gen_img):
-    img_gt = cv2.imread(gt_img.path(), cv2.IMREAD_GRAYSCALE)
-    img = cv2.imread(gen_img.path(), cv2.IMREAD_GRAYSCALE)
+    img_gt = gt_img.get_image()
+    img = gen_img.get_image()
 
     tp = 0
     tn = 0
@@ -76,7 +77,7 @@ def get_metric(gt_img, gen_img):
                 raise Exception('2')
     # print(f'TP={tp}, FP={fp}')
     # print(f'FN={fn}, TN={tn}')
-    return Metric(tp,fp,fn,tn,img_gt,img)
+    return Metric(tp,fp,fn,tn,gt_img,gen_img)
 
 class Fit:
     def __init__(self, gt_dir,generated_dir):
@@ -109,9 +110,6 @@ class Fit:
 
 
 
-
-
-
 def generate_fit(gt_dir,generated_dir):
     pairs = get_pairs(gt_dir, generated_dir)
     fit = Fit(gt_dir, generated_dir)
@@ -135,9 +133,13 @@ def generate_fits(gt_dir,generated_dir):
     for subdir in _subdirs(generated_dir):
         generate_fit(gt_dir, subdir)
 
+
+
+
+
 if __name__ == '__main__':
     gt_dir = path_root('data','all')
-    generated_dir = path_root('result', 'otsu')
+    generated_dir = path_root('result', 'kch_snake')
     generate_fits(gt_dir, generated_dir)
     # generated_dir = path_root('result', 'contrast')
     # generated_dir = path_root('result', 'nibla')
