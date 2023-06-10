@@ -6,10 +6,10 @@ print("\\Clear");
 // r - radius of window around pixel, =15
 // Parameter 1: ------
 // Parameter 2: ------
-
-for(r=29;r<=70;r+=4){
+out_dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/result_with_sda/otsu/";
+for(r=8;r<=8;r+=4){
     id=""+r+"_0_0";
-	path="C:/Users/x/gs/masterBio/code/corneal_endothelium/result/otsu/"+id+"/";
+	path=out_dir+id+"/";
 	string = path+" Otsu "+r+ " 0 0";
 	runMacro("C:/Users/x/gs/masterBio/code/corneal_endothelium/macro/set/run_method.ijm", string);
 
@@ -21,4 +21,4 @@ for(r=29;r<=70;r+=4){
 
 
 selectWindow("Log");
-saveAs("Text", "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/otsu/logs.txt");
+saveAs("Text", out_dir + "logs.txt");

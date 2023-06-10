@@ -6,11 +6,12 @@ print("\\Clear");
 // r - radius of window around pixel, =15
 // Parameter 1: is the C value. The default value is 0. Any other number will change the default value.
 // Parameter 2: ------
+out_dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/result_with_sda/mean/";
 
 for(r=5;r<=60;r+=4){
     for(par1=0;par1<=30;par1+=4){
         id=""+r+"_"+par1 +"_0";
-        path="C:/Users/x/gs/masterBio/code/corneal_endothelium/result/mean/"+id+"/";
+        path=out_dir+id+"/";
         string = path+" Mean "+r+ " "+par1+ " 0";
         runMacro("C:/Users/x/gs/masterBio/code/corneal_endothelium/macro/set/run_method.ijm", string);
 
@@ -22,4 +23,4 @@ for(r=5;r<=60;r+=4){
 
 
 selectWindow("Log");
-saveAs("Text", "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/mean/logs.txt");
+saveAs("Text", out_dir+"logs.txt");

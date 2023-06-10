@@ -6,12 +6,12 @@ print("\\Clear");
 // radius  - radius of window around pixel, =15
 // Parameter 1: is the k value. The default value is 0.25. Any other number than 0 will change its value.
 // Parameter 2: is the r value. The default value is 0.5. This value is different from Sauvola's because it uses the normalised intensity of the image. Any other number than 0 will change its value.
-
+out_dir = "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/result_with_sda/phansalkar/";
 for(r=5;r<=60;r+=5){
     for(par1=0.1;par1<=0.4;par1+=0.05){
         for(par2=0.2;par2<=1;par2+=0.1){
             id=""+r+"_"+par1+"_"+par2;
-            path="C:/Users/x/gs/masterBio/code/corneal_endothelium/result/phansalkar/"+id+"/";
+            path=out_dir+id+"/";
             string = path+" Phansalkar "+r+" "+par1+" "+par2;
             runMacro("C:/Users/x/gs/masterBio/code/corneal_endothelium/macro/set/run_method.ijm", string);
 
@@ -24,4 +24,4 @@ for(r=5;r<=60;r+=5){
 
 
 selectWindow("Log");
-saveAs("Text", "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/phansalkar/logs.txt");
+saveAs("Text", out_dir + "logs.txt");

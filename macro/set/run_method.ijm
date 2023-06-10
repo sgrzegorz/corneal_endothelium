@@ -1,9 +1,10 @@
 setBatchMode("hide");
 
 
-function processDataSet(i,string){
+function processImage(i,string){
 	all_path = "C:/Users/x/gs/masterBio/code/corneal_endothelium/data/all/";
 	input_path = all_path + i + "_SDAr6.png";
+//	input_path = all_path + i + ".png";
 	open(input_path);
 	run("Auto Local Threshold", string);
 	run("Invert LUT");
@@ -12,24 +13,35 @@ function processDataSet(i,string){
 	run("Close All");
 }
 
+function processIfNotCached(i,string){
+    output_path = path + i + "_met.png";
+	exists = File.exists(output_path);
+	if(exists == 0){
+		processImage(i,string);
+	}else{
+		print("File " + output_path +" exists, method skipping...");
+	}
+}
+
+
 
 function runForAll(){
 	string = "method=" +method+" radius="+radius +" parameter_1="+parameter_1+" parameter_2="+parameter_2+ " white";
 	print(string);
 	
 	for(i=101;i<=130;i++){ // yg
-		processDataSet(i,string);
+		processIfNotCached(i,string);
 	}
 
 	for(i=201;i<=252;i++){ // bs
-		processDataSet(i,string);
+		processIfNotCached(i,string);
 	}
 	for(i=301;i<=307;i++){ // ygs
-		processDataSet(i,string);
+		processIfNotCached(i,string);
 	}
-	for(i=401;i<=430;i++){ // ar
-		processDataSet(i,string);
-	}
+//	for(i=401;i<=430;i++){ // ar
+//		processIfNotCached(i,string);
+//	}
 
 }
 
@@ -41,7 +53,7 @@ function getVal(value){
 }
 
 // Example of usage:
-// string = "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/otsu/1/ Otsu 15 0 0"
+// string = "C:/Users/x/gs/masterBio/code/corneal_endothelium/result/result_with_sda/otsu/1/ Otsu 15 0 0"
 // runMacro("C:/Users/x/gs/masterBio/code/corneal_endothelium/macro/set/run_method.ijm", string);
 
 values = getArgument()
