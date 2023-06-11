@@ -30,7 +30,7 @@ def plot_wireframe(name,filtering):
     print(interp((xg,yg)))
 
 
-    fig = plt.figure()
+    fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(projection='3d')
 
     # ax.scatter(xg.ravel(), yg.ravel(), data.ravel(),
@@ -58,7 +58,7 @@ def plot_wireframe(name,filtering):
 
 
     index = np.argmax(Zg)
-    ax.scatter(Xg.flatten()[index],Yg.flatten()[index],Zg.flatten()[index],color='black', s=45)
+    ax.scatter(Xg.flatten()[index],Yg.flatten()[index],Zg.flatten()[index],color='black', s=65,label='maximum')
 
 
     # ground truth
@@ -66,7 +66,7 @@ def plot_wireframe(name,filtering):
     # ax.plot_wireframe(X, Y, ff(X, Y), rstride=3, cstride=3,
     #
     #                   alpha=0.4, label='ground truth')
-
+    scatter(ax,name,filtering)
 
     plt.legend()
     plt.savefig(path_root('plots', 'optimum', f'{name}_{filtering}'))
@@ -74,6 +74,22 @@ def plot_wireframe(name,filtering):
     #
     # plt.imshow(interp((Xg, Yg)), cmap='hot')
     # plt.show()
+
+
+
+def scatter(ax,name,filtering):
+    df = load_dataset(name, filtering)
+    df['param1'] = [int(params.split('_')[1]) for params in df.id]
+
+    # fig = plt.figure(figsize=(12, 12))
+    # ax = fig.add_subplot(projection='3d')
+
+    sequence_containing_x_vals = df.r
+    sequence_containing_y_vals = df.param1
+    sequence_containing_z_vals = df.fitness
+
+    ax.scatter(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals,label='punkty pomiarowe')
+
 
 name = 'midgrey'
 filtering = 'yg'
