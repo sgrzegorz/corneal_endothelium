@@ -69,7 +69,7 @@ def plot_wireframe(name,filtering):
     scatter(ax,name,filtering)
 
     plt.legend()
-    plt.savefig(path_root('plots', 'optimum', f'{name}_{filtering}'))
+    plt.savefig(path_root('plots', 'optimum', f'{filtering}_{name}_3d'))
     plt.show()
     #
     # plt.imshow(interp((Xg, Yg)), cmap='hot')
@@ -91,6 +91,7 @@ def scatter(ax,name,filtering):
     ax.scatter(sequence_containing_x_vals, sequence_containing_y_vals, sequence_containing_z_vals,label='punkty pomiarowe')
 
 
-name = 'midgrey'
-filtering = 'yg'
-plot_wireframe(name,filtering)
+filtering  = 'yg'
+for method in ['mean','median','midgrey']:
+    plot_wireframe(method, filtering)
+

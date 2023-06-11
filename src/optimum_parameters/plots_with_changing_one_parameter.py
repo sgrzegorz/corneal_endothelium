@@ -1,20 +1,20 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from src.utils import load_dataset
 
 from src.utils import path_root
 
-name = 'contrast'
+def plot_optimum_1d(name,filtering):
+    df = load_dataset(name,filtering)
+    df = df.sort_values('r', ascending=False)
 
-csv_path = path_root('result','result_with_sda',name , 'results.csv')
-aggregate_by = {'fitness': np.mean, 'dice': np.mean, 'jaccard': np.mean, 'acc': np.mean}
+    plt.plot(df.r,df.fitness)
+    plt.title(name)
+    plt.scatter(list(df.r)[np.argmax(df.fitness)],np.max(df.fitness))
+    plt.savefig(path_root('plots','optimum',f'{filtering}_{name}'))
+    plt.show()
 
-df = pd.read_csv(csv_path)
-print(f'------------- wszystkie razem ----------------')
-df = df.groupby(['method', 'id'],as_index=False).agg(aggregate_by)
-# df = df.sort_values('fitness', ascending=False)
-df['id_numeric'] = [int(params.split('_')[0]) for params in df.id ]
-df = df.sort_values('id_numeric', ascending=False)
-
-plt.plot(df.id_numeric,df.fitness)
-plt.show()
+for filtering in ['yg','bs','jgs']:
+    for name in ['contrast','otsu']:
+        plot_optimum_1d(name,filtering)
