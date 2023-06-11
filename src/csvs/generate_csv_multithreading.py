@@ -20,8 +20,8 @@ def run_all_within_dir(dir):
 
 if __name__ == '__main__':
     start = time()
-    run_all_within_dir('result_with_sda')
-    run_all_within_dir('result_without_sda')
+    run_all_within_dir('result/result_with_sda')
+    run_all_within_dir('result/result_without_sda')
 
     end = time() - start
 
