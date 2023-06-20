@@ -18,32 +18,21 @@ def print_stats(dataset,csv_path,aggregate_by):
 
 
 def plot_with_bars(df,method):
-    # [fitness, dice, jaccard, accuracy]
     barWidth = 0.15
     fig = plt.subplots(figsize=(12, 8))
-    # yg =
-    # bs =
-    # ygs =
-    # mean =
-
-    # yg = [12, 30, 1, 8]
-    # ygs = [28, 6, 16, 5]
-    # bs = [29, 3, 24, 25]
-    # mean = [21, 12, 12, 4]
 
     # Set position of bar on X axis
     br1 = np.arange(len(df.yg))
     br2 = [x + barWidth for x in br1]
     br3 = [x + barWidth for x in br2]
     br4 = [x + barWidth for x in br3]
-
     # Make the plot
     plt.bar(br1, df.yg, color='r', width=barWidth,
-            edgecolor='grey', label='yg')
-    plt.bar(br2, df.ygs, color='g', width=barWidth,
-            edgecolor='grey', label='ygs')
+            edgecolor='grey', label='Yann Gavet')
+    plt.bar(br2, df.jgs, color='g', width=barWidth,
+            edgecolor='grey', label='Jolanta Gronkowska-Serafin')
     plt.bar(br3, df.bs, color='b', width=barWidth,
-            edgecolor='grey', label='bs')
+            edgecolor='grey', label='Bettina Selig')
     plt.bar(br4, df['mean'], color='y', width=barWidth,
             edgecolor='grey', label='mean')
 
@@ -54,13 +43,13 @@ def plot_with_bars(df,method):
                ['fitness', 'dice', 'jaccard', 'accuracy'])
     plt.title(method,fontsize=20)
     plt.legend()
-    plt.savefig(path_root('plots',method))
+    plt.savefig(path_root('plots','barplots',method))
     plt.show()
 
 
 def process_method(method):
 
-    csv_path = path_root('result',method,'results.csv')
+    csv_path = path_root('result','result_with_sda',method,'results.csv')
     aggregate_by = {'fitness': np.mean, 'dice': np.mean, 'jaccard': np.mean,'acc': np.mean}
 
 
@@ -72,14 +61,14 @@ def process_method(method):
     print('\n\n')
     yg =[]
     bs = []
-    ygs =[]
+    jgs =[]
     df_all = None
-    for i in {'yg','bs','ygs'}:
+    for i in {'yg','bs','jgs'}:
         df1 = print_stats(i,csv_path,aggregate_by)
 
         df_all = pd.concat([df_all, df1],axis=1)
     df_all = pd.concat([df_all,df_all.mean(axis=1)],axis=1)
-    df_all.columns = ['yg', 'bs','ygs','mean']
+    df_all.columns = ['yg', 'bs','jgs','mean']
     plot_with_bars(df_all,method)
     # df = pd.read_csv(csv_path)
     # aggregate_by = {'fitness': np.std, 'dice': np.std, 'jaccard': np.std,'acc': np.std}
@@ -88,7 +77,9 @@ def process_method(method):
     # print(df)
 
 
-    # plot_with_bars(yg, ygs, bs, mean)
+    # plot_with_bars(yg, jgs, bs, mean)
 
-
-process_method('contrast')
+# methods =('bernsen','contrast','mean','median','midgrey','niblack','otsu','phansalkar','sauvola')
+methods =('bernsen',)
+for method in methods:
+    process_method(method)
