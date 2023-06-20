@@ -67,9 +67,10 @@ def plot_wireframe(name,filtering):
     #
     #                   alpha=0.4, label='ground truth')
     scatter(ax,name,filtering)
-
+    title = f'{filtering}_{name}_3d'
+    plt.title(title)
     plt.legend()
-    plt.savefig(path_root('plots', 'optimum', f'{filtering}_{name}_3d'))
+    plt.savefig(path_root('plots', 'optimum', title))
     plt.show()
     #
     # plt.imshow(interp((Xg, Yg)), cmap='hot')
@@ -92,6 +93,6 @@ def scatter(ax,name,filtering):
 
 
 filtering  = 'yg'
-for method in ['mean','median','midgrey']:
+for method in ['mean','median','midgrey','bernsen']:
     plot_wireframe(method, filtering)
 

@@ -11,25 +11,24 @@ from src.utils import path_root, load_dataset
 def plot_2d_heatmap(name, filtering):
 
     df = load_dataset(name,filtering)
-    df['param1'] = [int(params.split('_')[1]) for params in df.id ]
-    result = df.pivot(index='r', columns='param1', values='fitness')
+    result = df.pivot(index='param1', columns='r', values='fitness')
 
 
     ax = plt.subplot()
     # image = ax.imshow(result, cmap='coolwarm', interpolation='bilinear')
-    image = ax.imshow(result, cmap='coolwarm')
-    plt.ylabel('R')
-    plt.xlabel('param1')
+    image = ax.imshow(result, cmap='hsv')
+    plt.xlabel('R')
+    plt.ylabel('param1')
 
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
     plt.colorbar(image, cax=cax)
     plt.title(name)
-    plt.savefig(path_root('plots', 'optimum', f'{filtering}_{name}'))
+    plt.savefig(path_root('plots', 'optimum', f'{filtering}_heatmap_{name}'), transparent=True)
     plt.show()
 
 dataset  = 'yg'
-for method in ['mean','median','midgrey']:
+for method in ['mean','median','midgrey','bernsen']:
     plot_2d_heatmap(method,dataset)
 
 #

@@ -12,7 +12,9 @@ def plot_optimum_1d(name,filtering):
     plt.plot(df.r,df.fitness)
     plt.title(name)
     plt.scatter(list(df.r)[np.argmax(df.fitness)],np.max(df.fitness))
-    plt.savefig(path_root('plots','optimum',f'{filtering}_{name}'))
+    plt.ylabel('dopasowanie')
+    plt.xlabel('R')
+    plt.savefig(path_root('plots','optimum','params_1',f'{filtering}_{name}'))
     plt.show()
 
 for filtering in ['yg','bs','jgs']:

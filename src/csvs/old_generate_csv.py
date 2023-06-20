@@ -4,7 +4,7 @@ import pandas as pd
 from tqdm import tqdm
 from PIL import Image
 import cv2
-from src.dirs import get_pairs
+from src.csvs.dirs import get_pairs
 from src.utils import path_root, path
 import pickle
 
